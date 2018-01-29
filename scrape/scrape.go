@@ -11,11 +11,16 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
+type Price struct {
+	value float64
+	ccy   string
+}
+
 type Card struct {
 	name   string
 	set    string
 	rarity string
-	price  float64
+	price  Price
 	foil   bool
 }
 
@@ -72,7 +77,6 @@ func makeMTGGoldfishDownloadFn(set string, foil bool) func() (*goquery.Document,
 		set = fmt.Sprintf("%s_F", set)
 	}
 	url := fmt.Sprintf("https://www.mtggoldfish.com/index/%s#paper", set)
-	log.Printf("URL is: %s", url)
 
 	return func() (*goquery.Document, error) {
 		log.Printf("Downloading: %s", url)
@@ -90,11 +94,10 @@ func makeMTGGoldfishParser(set string, foil bool) func(doc *goquery.Document, c 
 
 			if name != "" {
 				if price, err := strconv.ParseFloat(p, 64); err == nil {
-					c <- Card{name, set, rarity, price, foil}
+					c <- Card{name, set, rarity, Price{price, "USD"}, foil}
 				}
 			}
 		}
-
 		doc.Find(".index-price-table tr").Each(parseCard)
 	}
 }

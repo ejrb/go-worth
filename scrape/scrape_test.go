@@ -39,7 +39,7 @@ func TestMTGGoldfishScraping(t *testing.T) {
 	cards := scraper.Scrape()
 
 	for _, card := range cards {
-		fmt.Printf("%s %.2f", card.name, card.price)
+		fmt.Printf("%s $%.2f", card.name, card.price.value)
 		if card.foil {
 			fmt.Printf(" (FOIL)")
 		}
