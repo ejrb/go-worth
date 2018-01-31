@@ -94,7 +94,7 @@ func makeMTGGoldfishParser(set string, foil bool) func(doc *goquery.Document, c 
 
 			if name != "" {
 				if price, err := strconv.ParseFloat(p, 64); err == nil {
-					c <- Card{name, set, rarity, Price{price, "USD"}, foil}
+					c <- Card{name, strings.ToUpper(set), rarity, Price{price, "USD"}, foil}
 				}
 			}
 		}
